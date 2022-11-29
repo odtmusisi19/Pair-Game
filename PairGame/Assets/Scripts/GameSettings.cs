@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameSettings : MonoBehaviour
 {
+    private readonly Dictionary<EPuzzleCategories, string> _puzzleCatDirectory = new Dictionary<EPuzzleCategories, string>();
     private int _settings;
     private const int SettingsNumber = 2;
     public enum EPairNumber
@@ -41,9 +42,15 @@ public class GameSettings : MonoBehaviour
     }
     void Start()
     {
+        SetPuzzleCatDirectory();
         _gameSettings = new Settings();
         ResetGameSettings();
 
+    }
+    public void SetPuzzleCatDirectory()
+    {
+        _puzzleCatDirectory.Add(EPuzzleCategories.Fruits, "Fruits");
+        _puzzleCatDirectory.Add(EPuzzleCategories.Vegetables, "Vegetables");
     }
     public void SetPairNumbers(EPairNumber Number)
     {
@@ -74,6 +81,22 @@ public class GameSettings : MonoBehaviour
     public bool AllSettingsReady()
     {
         return _settings == SettingsNumber;
+    }
+    public string GetMaterialDirectoryName()
+    {
+        return "Materials/";
+    }
+    public string GetPuzzleCategoryTextureDirectoryName()
+    {
+        if (_puzzleCatDirectory.ContainsKey(_gameSettings.PuzzleCategory))
+        {
+            return "Graphics/PuzzleCat/" + _puzzleCatDirectory[_gameSettings.PuzzleCategory] + "/";
+        }
+        else
+        {
+            Debug.LogError("ERROR : CANOT GET DIRECTORY NAME");
+            return "";
+        }
     }
 
 }
